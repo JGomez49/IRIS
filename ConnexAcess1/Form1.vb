@@ -12,6 +12,12 @@ Public Class Form1
         cargar_lista_motores()
 
         conexion.Close()
+
+        ComboBox1.SelectedIndex = ComboBox1.FindStringExact("Pack Lane 1") 'MTR 61302
+
+
+        read_Readings_table()
+        plot_readings()
     End Sub
 
     Sub cargar_lista_lanes()
@@ -19,11 +25,9 @@ Public Class Form1
             For i = 1 To 11
                 .Add("Pack Lane " & i)
             Next
-
             For i = 1 To 4
                 .Add("MOD Lane " & i)
             Next
-
             .Add("CP31")
             .Add("CP32")
             .Add("LOOP 1 of 2")
@@ -31,10 +35,6 @@ Public Class Form1
             .Add("Lanes 1/2")
             .Add("Lanes 2/2")
             .Add("Tranship")
-            .Add("Inducts 1-4")
-            .Add("Inducts 5-8")
-
-
         End With
     End Sub
 
@@ -44,43 +44,6 @@ Public Class Form1
 
     Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
         conexion.Close()
-    End Sub
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        'OK: Ingresar los registros a la tabla Registros
-        Try
-            enlace()
-            comando = New OleDb.OleDbCommand("INSERT INTO registros(Nombre, Apellido, Edad)" &
-                                 Chr(13) & "VALUES(TextBox1, TextBox2, TextBox3)", conexion)
-            comando.Parameters.AddWithValue("@Nombre", TextBox1.Text.ToUpper)
-            comando.Parameters.AddWithValue("@Apellido", TextBox2.Text.ToUpper)
-            comando.Parameters.AddWithValue("@Edad", TextBox3.Text.ToUpper)
-            comando.ExecuteNonQuery()
-            MsgBox("Data inserted")
-        Catch ex As Exception
-            conexion.Close()
-            MsgBox("Something went wrong. Data rejected!")
-        End Try
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        'Read from registros
-        Try
-            comando = New OleDb.OleDbCommand("SELECT * FROM registros", conexion)
-            Dim lector As OleDbDataReader
-            Dim tabla As New DataTable()
-
-            conexion.Open()
-            lector = comando.ExecuteReader()
-            tabla.Load(lector)
-
-            Me.DataGridView1.DataSource = tabla
-            conexion.Close()
-
-        Catch ex As Exception
-            conexion.Close()
-            MsgBox("Something went wrong. Data rejected! <Read>")
-        End Try
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
@@ -105,21 +68,21 @@ Public Class Form1
 
         With Chart1.Series("NDE")
             .ChartType = DataVisualization.Charting.SeriesChartType.Spline
-            .MarkerStyle = DataVisualization.Charting.MarkerStyle.Circle
+            '.MarkerStyle = DataVisualization.Charting.MarkerStyle.Circle
             .MarkerSize = 5
             .Points.Clear()
         End With
 
         With Chart1.Series("DE")
             .ChartType = DataVisualization.Charting.SeriesChartType.Spline
-            .MarkerStyle = DataVisualization.Charting.MarkerStyle.Circle
+            '.MarkerStyle = DataVisualization.Charting.MarkerStyle.Circle
             .MarkerSize = 5
             .Points.Clear()
         End With
 
         With Chart1.Series("GOB")
             .ChartType = DataVisualization.Charting.SeriesChartType.Spline
-            .MarkerStyle = DataVisualization.Charting.MarkerStyle.Circle
+            '.MarkerStyle = DataVisualization.Charting.MarkerStyle.Circle
             .MarkerSize = 5
             .Points.Clear()
         End With
@@ -130,19 +93,25 @@ Public Class Form1
         For i = 0 To DataGridView2.RowCount - 2
             x = i 'DataGridView2.Rows(i).Cells(0).Value
             y = DataGridView2.Rows(i).Cells(6).Value
-            Chart1.Series("NDE").Points.AddXY(x, y)
+            If y <> 0 Then
+                Chart1.Series("NDE").Points.AddXY(x, y)
+            End If
         Next
 
         For i = 0 To DataGridView2.RowCount - 2
             x = i 'DataGridView2.Rows(i).Cells(0).Value
             y = DataGridView2.Rows(i).Cells(7).Value
-            Chart1.Series("DE").Points.AddXY(x, y)
+            If y <> 0 Then
+                Chart1.Series("DE").Points.AddXY(x, y)
+            End If
         Next
 
         For i = 0 To DataGridView2.RowCount - 2
             x = i 'DataGridView2.Rows(i).Cells(0).Value
             y = DataGridView2.Rows(i).Cells(9).Value
-            Chart1.Series("GOB").Points.AddXY(x, y)
+            If y <> 0 Then
+                Chart1.Series("GOB").Points.AddXY(x, y)
+            End If
         Next
 
 
@@ -181,6 +150,7 @@ Public Class Form1
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         read_Readings_table()
+        plot_readings()
     End Sub
 
     Sub read_Readings_table()
@@ -193,7 +163,6 @@ Public Class Form1
 
             comando = New OleDb.OleDbCommand("SELECT * FROM Readings WHERE MTR='" & MTR & "'", conexion)
 
-
             Dim lector As OleDbDataReader
             Dim tabla As New DataTable()
 
@@ -202,7 +171,8 @@ Public Class Form1
             tabla.Load(lector)
 
             Me.DataGridView2.DataSource = tabla
-            DataGridView2.Sort(DataGridView2.Columns(0), ListSortDirection.Descending) 'Organizar por ID descendiente
+            DataGridView2.Sort(DataGridView2.Columns(4), ListSortDirection.Descending) 'Organizar por WO descendiente
+
             conexion.Close()
 
         Catch ex As Exception
@@ -249,5 +219,29 @@ Public Class Form1
 
     Private Sub DataGridView3_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView3.CellContentClick
         TextBox9.Text = DataGridView3.CurrentCell.Value
+        read_Readings_table()
+        plot_readings()
+
     End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        Try
+            Dim t As Integer
+            t = Val(TextBox13.Text)
+            read_Readings_table()
+            truncar_lista(t)
+            plot_readings()
+        Catch ex As Exception
+            MsgBox("This operation produced an error. Is this error persists contact administrator.")
+        End Try
+    End Sub
+
+    Sub truncar_lista(r As Integer)
+        Dim ufil As Integer
+        ufil = DataGridView2.Rows.Count - 2
+        For i = ufil To r Step -1
+            DataGridView2.Rows.RemoveAt(i)
+        Next
+    End Sub
+
 End Class
