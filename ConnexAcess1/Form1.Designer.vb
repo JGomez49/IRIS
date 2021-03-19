@@ -80,11 +80,11 @@ Partial Class Form1
         '
         Me.GroupBox1.Controls.Add(Me.ComboBox1)
         Me.GroupBox1.Controls.Add(Me.DataGridView3)
-        Me.GroupBox1.Location = New System.Drawing.Point(11, 167)
+        Me.GroupBox1.Location = New System.Drawing.Point(11, 143)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(219, 189)
+        Me.GroupBox1.Size = New System.Drawing.Size(219, 213)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Lanes and Motors"
@@ -123,8 +123,6 @@ Partial Class Form1
         '
         Me.GroupBox2.Controls.Add(Me.TextBox7)
         Me.GroupBox2.Controls.Add(Me.Label8)
-        Me.GroupBox2.Controls.Add(Me.Label9)
-        Me.GroupBox2.Controls.Add(Me.TextBox9)
         Me.GroupBox2.Controls.Add(Me.TextBox4)
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.TextBox5)
@@ -135,7 +133,7 @@ Partial Class Form1
         Me.GroupBox2.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox2.Size = New System.Drawing.Size(219, 152)
+        Me.GroupBox2.Size = New System.Drawing.Size(219, 128)
         Me.GroupBox2.TabIndex = 13
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Job Information"
@@ -163,7 +161,7 @@ Partial Class Form1
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(11, 121)
+        Me.Label9.Location = New System.Drawing.Point(463, 277)
         Me.Label9.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(34, 13)
@@ -174,7 +172,7 @@ Partial Class Form1
         '
         Me.TextBox9.BackColor = System.Drawing.Color.Silver
         Me.TextBox9.Enabled = False
-        Me.TextBox9.Location = New System.Drawing.Point(49, 118)
+        Me.TextBox9.Location = New System.Drawing.Point(501, 274)
         Me.TextBox9.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBox9.Name = "TextBox9"
         Me.TextBox9.Size = New System.Drawing.Size(143, 20)
@@ -360,7 +358,7 @@ Partial Class Form1
         Me.DataGridView3.Name = "DataGridView3"
         Me.DataGridView3.RowHeadersWidth = 51
         Me.DataGridView3.RowTemplate.Height = 24
-        Me.DataGridView3.Size = New System.Drawing.Size(119, 141)
+        Me.DataGridView3.Size = New System.Drawing.Size(119, 165)
         Me.DataGridView3.TabIndex = 18
         '
         'GroupBox3
@@ -414,7 +412,9 @@ Partial Class Form1
         Me.ClientSize = New System.Drawing.Size(981, 495)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.TextBox13)
+        Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.Button6)
+        Me.Controls.Add(Me.TextBox9)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button5)
