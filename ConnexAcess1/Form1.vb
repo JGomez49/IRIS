@@ -4,7 +4,8 @@ Imports System.Data.OleDb
 Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         enlace()
-        Label1.Text = estado
+        'Label1.Text = estado
+        ToolStripStatusLabel1.Text = estado
         TextBox4.Text = Environment.UserName
         TextBox6.Text = Today()
 
@@ -14,7 +15,6 @@ Public Class Form1
         conexion.Close()
 
         ComboBox1.SelectedIndex = ComboBox1.FindStringExact("Pack Lane 1") 'MTR 61302
-
 
         read_Readings_table()
         plot_readings()
@@ -114,15 +114,21 @@ Public Class Form1
             End If
         Next
 
-
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         'OK: Ingresar los registros a la tabla Motores
+
+        Dim v As Integer
+        v = Larger_WO()
+
+        If (TextBox5.Text = "") Or (TextBox5.Text.Length <> 8) Or (Val(TextBox5.Text) <= v) Then
+            MsgBox("Check the Work Order number, correct and try again.")
+            GoTo E100
+        End If
+
         Try
-
             enlace()
-
             comando = New OleDb.OleDbCommand("INSERT INTO Readings(MTR, Tech, DTime, WO, Lane, DE, NDE, GIB, GOB)" & Chr(13) _
                                              & "VALUES(TextBox9, TextBox4, TextBox6, TextBox5, TextBox7, TextBox10, TextBox8, TextBox11, TextBox12)", conexion)
 
@@ -146,7 +152,27 @@ Public Class Form1
             conexion.Close()
             MsgBox("Something went wrong. Data rejected!")
         End Try
+E100:
     End Sub
+
+    Function Larger_WO() As Integer
+
+        Dim abcd As Integer
+        Dim col As Integer
+
+        col = 4
+
+        For x As Integer = 0 To DataGridView2.Rows.Count - 1
+            If abcd = 0 Then
+                abcd = DataGridView2.Rows(x).Cells(col).Value
+            Else
+                If abcd < DataGridView2.Rows(x).Cells(col).Value Then abcd = DataGridView2.Rows(x).Cells(col).Value
+            End If
+        Next
+        'MsgBox(abcd)
+        Return abcd
+
+    End Function
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         read_Readings_table()
@@ -172,6 +198,14 @@ Public Class Form1
 
             Me.DataGridView2.DataSource = tabla
             DataGridView2.Sort(DataGridView2.Columns(4), ListSortDirection.Descending) 'Organizar por WO descendiente
+
+            DataGridView2.Columns(0).Width = 65
+            For i = 1 To 5
+                DataGridView2.Columns(i).Width = 80
+            Next
+            For i = 6 To 9
+                DataGridView2.Columns(i).Width = 50
+            Next
 
             conexion.Close()
 
@@ -244,4 +278,7 @@ Public Class Form1
         Next
     End Sub
 
+    Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItem.Click
+        MsgBox("Data saved")
+    End Sub
 End Class

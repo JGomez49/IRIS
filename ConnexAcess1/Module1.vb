@@ -9,12 +9,14 @@ Module Module1
 
     Sub enlace()
         Try
-            conexion.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\ajhgonz\Documents\registro.accdb"
+            'conexion.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\ajhgonz\Documents\registro.accdb"
+            '\\ant\dept-na\YYC1\Support\Facilities\DBIR\registro.accdb
+            conexion.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\\ant\dept-na\YYC1\Support\Facilities\DBIR\registro.accdb"
             conexion.Open()
-            estado = "Conectado"
+            estado = "Status: Connected"
 
         Catch ex As Exception
-            estado = "Desconectado"
+            estado = "Status: Not connected"
 
         End Try
     End Sub
