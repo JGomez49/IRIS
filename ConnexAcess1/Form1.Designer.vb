@@ -89,6 +89,7 @@ Partial Class Form1
         Me.SearchToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.toolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.GroupBox1.SuspendLayout()
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -97,17 +98,18 @@ Partial Class Form1
         Me.GroupBox3.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.ComboBox1)
         Me.GroupBox1.Controls.Add(Me.DataGridView3)
-        Me.GroupBox1.Location = New System.Drawing.Point(11, 162)
-        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
+        Me.GroupBox1.Location = New System.Drawing.Point(15, 199)
+        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(219, 213)
+        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.GroupBox1.Size = New System.Drawing.Size(292, 262)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Lanes and Motors"
@@ -115,20 +117,21 @@ Partial Class Form1
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(49, 18)
+        Me.ComboBox1.Location = New System.Drawing.Point(65, 22)
+        Me.ComboBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(121, 21)
+        Me.ComboBox1.Size = New System.Drawing.Size(160, 24)
         Me.ComboBox1.TabIndex = 17
         '
         'DataGridView3
         '
         Me.DataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView3.Location = New System.Drawing.Point(49, 44)
-        Me.DataGridView3.Margin = New System.Windows.Forms.Padding(2)
+        Me.DataGridView3.Location = New System.Drawing.Point(65, 54)
+        Me.DataGridView3.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.DataGridView3.Name = "DataGridView3"
         Me.DataGridView3.RowHeadersWidth = 51
         Me.DataGridView3.RowTemplate.Height = 24
-        Me.DataGridView3.Size = New System.Drawing.Size(119, 165)
+        Me.DataGridView3.Size = New System.Drawing.Size(159, 203)
         Me.DataGridView3.TabIndex = 18
         '
         'Chart1
@@ -140,23 +143,23 @@ Partial Class Form1
         Legend2.BackColor = System.Drawing.Color.Transparent
         Legend2.Name = "Legend1"
         Me.Chart1.Legends.Add(Legend2)
-        Me.Chart1.Location = New System.Drawing.Point(235, 293)
-        Me.Chart1.Margin = New System.Windows.Forms.Padding(2)
+        Me.Chart1.Location = New System.Drawing.Point(313, 361)
+        Me.Chart1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Chart1.Name = "Chart1"
         Series2.ChartArea = "ChartArea1"
         Series2.Legend = "Legend1"
         Series2.Name = "Series1"
         Me.Chart1.Series.Add(Series2)
-        Me.Chart1.Size = New System.Drawing.Size(735, 210)
+        Me.Chart1.Size = New System.Drawing.Size(980, 258)
         Me.Chart1.TabIndex = 11
         Me.Chart1.Text = "Chart1"
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(825, 24)
-        Me.Button3.Margin = New System.Windows.Forms.Padding(2)
+        Me.Button3.Location = New System.Drawing.Point(1100, 30)
+        Me.Button3.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(70, 24)
+        Me.Button3.Size = New System.Drawing.Size(93, 30)
         Me.Button3.TabIndex = 12
         Me.Button3.Text = "Plot"
         Me.Button3.UseVisualStyleBackColor = True
@@ -171,11 +174,11 @@ Partial Class Form1
         Me.GroupBox2.Controls.Add(Me.Label6)
         Me.GroupBox2.Controls.Add(Me.TextBox6)
         Me.GroupBox2.Controls.Add(Me.Label7)
-        Me.GroupBox2.Location = New System.Drawing.Point(11, 31)
-        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(2)
+        Me.GroupBox2.Location = New System.Drawing.Point(15, 38)
+        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox2.Size = New System.Drawing.Size(219, 128)
+        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.GroupBox2.Size = New System.Drawing.Size(292, 158)
         Me.GroupBox2.TabIndex = 13
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Job Information"
@@ -184,19 +187,18 @@ Partial Class Form1
         '
         Me.TextBox7.BackColor = System.Drawing.Color.Silver
         Me.TextBox7.Enabled = False
-        Me.TextBox7.Location = New System.Drawing.Point(49, 94)
-        Me.TextBox7.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox7.Location = New System.Drawing.Point(65, 116)
+        Me.TextBox7.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBox7.Name = "TextBox7"
-        Me.TextBox7.Size = New System.Drawing.Size(143, 20)
+        Me.TextBox7.Size = New System.Drawing.Size(189, 22)
         Me.TextBox7.TabIndex = 11
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(14, 97)
-        Me.Label8.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label8.Location = New System.Drawing.Point(19, 119)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(31, 13)
+        Me.Label8.Size = New System.Drawing.Size(38, 16)
         Me.Label8.TabIndex = 8
         Me.Label8.Text = "Lane"
         '
@@ -204,37 +206,35 @@ Partial Class Form1
         '
         Me.TextBox4.BackColor = System.Drawing.Color.Silver
         Me.TextBox4.Enabled = False
-        Me.TextBox4.Location = New System.Drawing.Point(49, 22)
-        Me.TextBox4.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox4.Location = New System.Drawing.Point(65, 27)
+        Me.TextBox4.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(143, 20)
+        Me.TextBox4.Size = New System.Drawing.Size(189, 22)
         Me.TextBox4.TabIndex = 4
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(18, 25)
-        Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label5.Location = New System.Drawing.Point(24, 31)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(29, 13)
+        Me.Label5.Size = New System.Drawing.Size(37, 16)
         Me.Label5.TabIndex = 1
         Me.Label5.Text = "User"
         '
         'TextBox5
         '
-        Me.TextBox5.Location = New System.Drawing.Point(49, 70)
-        Me.TextBox5.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox5.Location = New System.Drawing.Point(65, 86)
+        Me.TextBox5.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(143, 20)
+        Me.TextBox5.Size = New System.Drawing.Size(189, 22)
         Me.TextBox5.TabIndex = 6
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(19, 73)
-        Me.Label6.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label6.Location = New System.Drawing.Point(25, 90)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(26, 13)
+        Me.Label6.Size = New System.Drawing.Size(31, 16)
         Me.Label6.TabIndex = 2
         Me.Label6.Text = "WO"
         '
@@ -242,29 +242,27 @@ Partial Class Form1
         '
         Me.TextBox6.BackColor = System.Drawing.Color.Silver
         Me.TextBox6.Enabled = False
-        Me.TextBox6.Location = New System.Drawing.Point(49, 46)
-        Me.TextBox6.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox6.Location = New System.Drawing.Point(65, 57)
+        Me.TextBox6.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.Size = New System.Drawing.Size(143, 20)
+        Me.TextBox6.Size = New System.Drawing.Size(189, 22)
         Me.TextBox6.TabIndex = 5
         '
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(17, 49)
-        Me.Label7.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label7.Location = New System.Drawing.Point(23, 60)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(30, 13)
+        Me.Label7.Size = New System.Drawing.Size(37, 16)
         Me.Label7.TabIndex = 3
         Me.Label7.Text = "Date"
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(463, 297)
-        Me.Label9.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label9.Location = New System.Drawing.Point(617, 366)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(34, 13)
+        Me.Label9.Size = New System.Drawing.Size(42, 16)
         Me.Label9.TabIndex = 9
         Me.Label9.Text = "Motor"
         '
@@ -272,28 +270,27 @@ Partial Class Form1
         '
         Me.TextBox9.BackColor = System.Drawing.Color.Silver
         Me.TextBox9.Enabled = False
-        Me.TextBox9.Location = New System.Drawing.Point(501, 293)
-        Me.TextBox9.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox9.Location = New System.Drawing.Point(668, 361)
+        Me.TextBox9.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBox9.Name = "TextBox9"
-        Me.TextBox9.Size = New System.Drawing.Size(143, 20)
+        Me.TextBox9.Size = New System.Drawing.Size(189, 22)
         Me.TextBox9.TabIndex = 12
         Me.TextBox9.Text = "MTR 61302"
         '
         'TextBox12
         '
-        Me.TextBox12.Location = New System.Drawing.Point(48, 93)
-        Me.TextBox12.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox12.Location = New System.Drawing.Point(64, 114)
+        Me.TextBox12.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBox12.Name = "TextBox12"
-        Me.TextBox12.Size = New System.Drawing.Size(64, 20)
+        Me.TextBox12.Size = New System.Drawing.Size(84, 22)
         Me.TextBox12.TabIndex = 19
         '
         'Label13
         '
         Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(14, 96)
-        Me.Label13.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label13.Location = New System.Drawing.Point(19, 118)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(30, 13)
+        Me.Label13.Size = New System.Drawing.Size(37, 16)
         Me.Label13.TabIndex = 18
         Me.Label13.Text = "GOB"
         '
@@ -301,64 +298,61 @@ Partial Class Form1
         '
         Me.TextBox11.BackColor = System.Drawing.Color.Silver
         Me.TextBox11.Enabled = False
-        Me.TextBox11.Location = New System.Drawing.Point(48, 69)
-        Me.TextBox11.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox11.Location = New System.Drawing.Point(64, 85)
+        Me.TextBox11.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBox11.Name = "TextBox11"
-        Me.TextBox11.Size = New System.Drawing.Size(64, 20)
+        Me.TextBox11.Size = New System.Drawing.Size(84, 22)
         Me.TextBox11.TabIndex = 17
         '
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(19, 72)
-        Me.Label12.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label12.Location = New System.Drawing.Point(25, 89)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(25, 13)
+        Me.Label12.Size = New System.Drawing.Size(30, 16)
         Me.Label12.TabIndex = 16
         Me.Label12.Text = "GIB"
         '
         'TextBox10
         '
-        Me.TextBox10.Location = New System.Drawing.Point(48, 45)
-        Me.TextBox10.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox10.Location = New System.Drawing.Point(64, 55)
+        Me.TextBox10.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBox10.Name = "TextBox10"
-        Me.TextBox10.Size = New System.Drawing.Size(64, 20)
+        Me.TextBox10.Size = New System.Drawing.Size(84, 22)
         Me.TextBox10.TabIndex = 15
         '
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(22, 48)
-        Me.Label11.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label11.Location = New System.Drawing.Point(29, 59)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(22, 13)
+        Me.Label11.Size = New System.Drawing.Size(27, 16)
         Me.Label11.TabIndex = 14
         Me.Label11.Text = "DE"
         '
         'TextBox8
         '
-        Me.TextBox8.Location = New System.Drawing.Point(48, 21)
-        Me.TextBox8.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox8.Location = New System.Drawing.Point(64, 26)
+        Me.TextBox8.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBox8.Name = "TextBox8"
-        Me.TextBox8.Size = New System.Drawing.Size(64, 20)
+        Me.TextBox8.Size = New System.Drawing.Size(84, 22)
         Me.TextBox8.TabIndex = 13
         '
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(14, 24)
-        Me.Label10.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label10.Location = New System.Drawing.Point(19, 30)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(30, 13)
+        Me.Label10.Size = New System.Drawing.Size(37, 16)
         Me.Label10.TabIndex = 10
         Me.Label10.Text = "NDE"
         '
         'Button4
         '
-        Me.Button4.Location = New System.Drawing.Point(130, 90)
-        Me.Button4.Margin = New System.Windows.Forms.Padding(2)
+        Me.Button4.Location = New System.Drawing.Point(173, 111)
+        Me.Button4.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(70, 24)
+        Me.Button4.Size = New System.Drawing.Size(93, 30)
         Me.Button4.TabIndex = 7
         Me.Button4.Text = "Ok"
         Me.Button4.UseVisualStyleBackColor = True
@@ -366,20 +360,20 @@ Partial Class Form1
         'DataGridView2
         '
         Me.DataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView2.Location = New System.Drawing.Point(234, 53)
-        Me.DataGridView2.Margin = New System.Windows.Forms.Padding(2)
+        Me.DataGridView2.Location = New System.Drawing.Point(313, 65)
+        Me.DataGridView2.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.DataGridView2.Name = "DataGridView2"
         Me.DataGridView2.RowHeadersWidth = 51
         Me.DataGridView2.RowTemplate.Height = 24
-        Me.DataGridView2.Size = New System.Drawing.Size(735, 237)
+        Me.DataGridView2.Size = New System.Drawing.Size(979, 292)
         Me.DataGridView2.TabIndex = 14
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(899, 24)
-        Me.Button5.Margin = New System.Windows.Forms.Padding(2)
+        Me.Button5.Location = New System.Drawing.Point(1199, 30)
+        Me.Button5.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(70, 24)
+        Me.Button5.Size = New System.Drawing.Size(93, 30)
         Me.Button5.TabIndex = 15
         Me.Button5.Text = "Read"
         Me.Button5.UseVisualStyleBackColor = True
@@ -395,36 +389,41 @@ Partial Class Form1
         Me.GroupBox3.Controls.Add(Me.Label13)
         Me.GroupBox3.Controls.Add(Me.Button4)
         Me.GroupBox3.Controls.Add(Me.TextBox11)
-        Me.GroupBox3.Location = New System.Drawing.Point(12, 380)
+        Me.GroupBox3.Location = New System.Drawing.Point(16, 468)
+        Me.GroupBox3.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(218, 123)
+        Me.GroupBox3.Padding = New System.Windows.Forms.Padding(4)
+        Me.GroupBox3.Size = New System.Drawing.Size(291, 151)
         Me.GroupBox3.TabIndex = 20
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "New IR Readings"
         '
         'Button6
         '
-        Me.Button6.Location = New System.Drawing.Point(898, 488)
+        Me.Button6.Location = New System.Drawing.Point(1197, 601)
+        Me.Button6.Margin = New System.Windows.Forms.Padding(4)
         Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(70, 23)
+        Me.Button6.Size = New System.Drawing.Size(93, 28)
         Me.Button6.TabIndex = 21
         Me.Button6.Text = "Filter"
         Me.Button6.UseVisualStyleBackColor = True
         '
         'TextBox13
         '
-        Me.TextBox13.Location = New System.Drawing.Point(859, 491)
+        Me.TextBox13.Location = New System.Drawing.Point(1145, 604)
+        Me.TextBox13.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox13.Name = "TextBox13"
-        Me.TextBox13.Size = New System.Drawing.Size(33, 20)
+        Me.TextBox13.Size = New System.Drawing.Size(43, 22)
         Me.TextBox13.TabIndex = 22
         Me.TextBox13.Text = "20"
         '
         'Label14
         '
         Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(805, 493)
+        Me.Label14.Location = New System.Drawing.Point(1073, 607)
+        Me.Label14.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(48, 13)
+        Me.Label14.Size = New System.Drawing.Size(60, 16)
         Me.Label14.TabIndex = 23
         Me.Label14.Text = "See last:"
         '
@@ -432,10 +431,10 @@ Partial Class Form1
         '
         Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 511)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 634)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
-        Me.StatusStrip1.Size = New System.Drawing.Size(981, 22)
+        Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 13, 0)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1308, 22)
         Me.StatusStrip1.TabIndex = 24
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -451,9 +450,9 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(4, 2, 0, 2)
+        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(5, 2, 0, 2)
         Me.MenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.MenuStrip1.Size = New System.Drawing.Size(981, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1308, 24)
         Me.MenuStrip1.TabIndex = 25
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -470,7 +469,7 @@ Partial Class Form1
         Me.NewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
         Me.NewToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.N), System.Windows.Forms.Keys)
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(184, 26)
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.NewToolStripMenuItem.Text = "&New"
         '
         'OpenToolStripMenuItem
@@ -493,7 +492,7 @@ Partial Class Form1
         Me.SaveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem"
         Me.SaveToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
-        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(184, 26)
+        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.SaveToolStripMenuItem.Text = "&Save"
         '
         'SaveAsToolStripMenuItem
@@ -654,11 +653,23 @@ Partial Class Form1
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
         Me.AboutToolStripMenuItem.Text = "&About..."
         '
+        'DataGridView1
+        '
+        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridView1.Location = New System.Drawing.Point(335, 65)
+        Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.RowHeadersWidth = 51
+        Me.DataGridView1.RowTemplate.Height = 24
+        Me.DataGridView1.Size = New System.Drawing.Size(428, 292)
+        Me.DataGridView1.TabIndex = 26
+        '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(981, 533)
+        Me.ClientSize = New System.Drawing.Size(1308, 656)
+        Me.Controls.Add(Me.DataGridView2)
+        Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.Label14)
@@ -669,14 +680,13 @@ Partial Class Form1
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button5)
-        Me.Controls.Add(Me.DataGridView2)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.Chart1)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.Margin = New System.Windows.Forms.Padding(2)
+        Me.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.MaximizeBox = False
         Me.Name = "Form1"
         Me.Text = "JLL-Amazon - Infrared Readings"
@@ -692,6 +702,7 @@ Partial Class Form1
         Me.StatusStrip1.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -759,4 +770,5 @@ Partial Class Form1
     Friend WithEvents SearchToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents toolStripSeparator5 As ToolStripSeparator
     Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DataGridView1 As DataGridView
 End Class

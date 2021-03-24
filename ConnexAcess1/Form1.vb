@@ -10,13 +10,14 @@ Public Class Form1
         TextBox6.Text = Today()
 
         cargar_lista_lanes()
-        cargar_lista_motores()
 
         conexion.Close()
 
         ComboBox1.SelectedIndex = ComboBox1.FindStringExact("Pack Lane 1") 'MTR 61302
 
-        read_Readings_table()
+        read_Readings_table(DataGridView1)
+        cargar_tabla_readings(DataGridView2)
+        'read_Readings_table(DataGridView2)
         plot_readings()
     End Sub
 
@@ -38,9 +39,6 @@ Public Class Form1
         End With
     End Sub
 
-    Sub cargar_lista_motores()
-
-    End Sub
 
     Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
         conexion.Close()
@@ -141,12 +139,14 @@ Public Class Form1
             comando.Parameters.AddWithValue("@NDE", Val(TextBox8.Text))
             comando.Parameters.AddWithValue("@GIB", Val(TextBox11.Text))
             comando.Parameters.AddWithValue("@GOB", Val(TextBox12.Text))
-
             comando.ExecuteNonQuery()
             MsgBox("Data inserted by " & Environment.UserName)
             conexion.Close()
 
-            read_Readings_table()
+            read_Readings_table(DataGridView1)
+            cargar_tabla_readings(DataGridView2)
+            'read_Readings_table(DataGridView2)
+            plot_readings()
 
         Catch ex As Exception
             conexion.Close()
@@ -175,19 +175,75 @@ E100:
     End Function
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        read_Readings_table()
+        'read_Readings_table(DataGridView1)
+        cargar_tabla_readings(DataGridView2)
         plot_readings()
     End Sub
 
-    Sub read_Readings_table()
+    Sub cargar_tabla_readings(DGV As DataGridView)
+        'Filtrar la tabla DGV1 en DGV2 por motor
+        Try
+            Dim MTR As String
+            MTR = TextBox9.Text
+
+            Dim ufil As Integer
+            ufil = DataGridView1.Rows.Count - 1
+
+            Dim ucol As Integer
+            ucol = DataGridView1.Columns.Count - 1
+
+            DGV.Columns.Clear()
+
+            For j = 0 To ucol
+                DGV.Columns.Add(j, DataGridView1.Columns(j).HeaderText)
+            Next
+
+            Dim col As Integer
+            col = 1
+
+            Dim k As Integer
+            k = 0
+
+            For i = 0 To ufil
+
+                If DataGridView1.Rows(i).Cells(1).Value = MTR Then
+                    DGV.Rows.Add()
+                    For j = 0 To ucol
+                        DGV.Rows(k).Cells(j).Value = DataGridView1.Rows(i).Cells(j).Value
+                    Next
+
+                    k = k + 1
+
+                End If
+
+            Next
+
+            DGV.Sort(DGV.Columns(4), ListSortDirection.Ascending)
+
+            DGV.Columns(0).Width = 65
+            For i = 1 To 5
+                DGV.Columns(i).Width = 80
+            Next
+            For i = 6 To 9
+                DGV.Columns(i).Width = 50
+            Next
+
+        Catch ex As Exception
+            MsgBox("Something went wrong. Data rejected! <Read>")
+        End Try
+
+
+    End Sub
+
+    Sub read_Readings_table(DGV As DataGridView)
         'Read from Readings
         Try
             Dim MTR As String
             MTR = TextBox9.Text
 
-            'comando = New OleDb.OleDbCommand("SELECT * FROM Readings", conexion)
+            comando = New OleDb.OleDbCommand("SELECT * FROM Readings", conexion)
 
-            comando = New OleDb.OleDbCommand("SELECT * FROM Readings WHERE MTR='" & MTR & "'", conexion)
+            'comando = New OleDb.OleDbCommand("SELECT * FROM Readings WHERE MTR='" & MTR & "'", conexion)
 
             Dim lector As OleDbDataReader
             Dim tabla As New DataTable()
@@ -196,15 +252,15 @@ E100:
             lector = comando.ExecuteReader()
             tabla.Load(lector)
 
-            Me.DataGridView2.DataSource = tabla
-            DataGridView2.Sort(DataGridView2.Columns(4), ListSortDirection.Descending) 'Organizar por WO descendiente
+            DGV.DataSource = tabla
+            DGV.Sort(DGV.Columns(4), ListSortDirection.Ascending)
 
-            DataGridView2.Columns(0).Width = 65
+            DGV.Columns(0).Width = 65
             For i = 1 To 5
-                DataGridView2.Columns(i).Width = 80
+                DGV.Columns(i).Width = 80
             Next
             For i = 6 To 9
-                DataGridView2.Columns(i).Width = 50
+                DGV.Columns(i).Width = 50
             Next
 
             conexion.Close()
@@ -253,7 +309,8 @@ E100:
 
     Private Sub DataGridView3_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView3.CellContentClick
         TextBox9.Text = DataGridView3.CurrentCell.Value
-        read_Readings_table()
+        'read_Readings_table(DataGridView2)
+        cargar_tabla_readings(DataGridView2)
         plot_readings()
 
     End Sub
@@ -262,7 +319,8 @@ E100:
         Try
             Dim t As Integer
             t = Val(TextBox13.Text)
-            read_Readings_table()
+            'read_Readings_table(DataGridView2)
+            cargar_tabla_readings(DataGridView2)
             truncar_lista(t)
             plot_readings()
         Catch ex As Exception
@@ -281,4 +339,6 @@ E100:
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItem.Click
         MsgBox("Data saved")
     End Sub
+
+
 End Class
