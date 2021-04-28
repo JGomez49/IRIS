@@ -1,5 +1,8 @@
 ﻿Imports System.ComponentModel
 Imports System.Data.OleDb
+Imports System.Net
+Imports System.Net.Mail
+Imports EASendMail
 
 Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -19,6 +22,13 @@ Public Class Form1
         cargar_tabla_readings(DataGridView2)
         'read_Readings_table(DataGridView2)
         plot_readings()
+
+        If TextBox4.Text = "ajhgonz" Then
+            Button3.Visible = True
+            Button5.Visible = True
+            Button1.Visible = True
+        End If
+
     End Sub
 
     Sub cargar_lista_lanes()
@@ -36,6 +46,8 @@ Public Class Form1
             .Add("Lanes 1/2")
             .Add("Lanes 2/2")
             .Add("Tranship")
+            .Add("Trash Lane")
+            .Add("Merge Lane")
         End With
     End Sub
 
@@ -52,9 +64,10 @@ Public Class Form1
         'Plot desde el datagridview2
 
         Chart1.Series.Clear()
-        Chart1.Series.Add("NDE")
-        Chart1.Series.Add("DE")
+
         Chart1.Series.Add("GOB")
+        Chart1.Series.Add("DE")
+        Chart1.Series.Add("NDE")
 
         'Chart1.Legends.Clear()
         Chart1.ChartAreas(0).AxisX.Interval = 1
@@ -90,9 +103,9 @@ Public Class Form1
 
         For i = 0 To DataGridView2.RowCount - 2
             x = i 'DataGridView2.Rows(i).Cells(0).Value
-            y = DataGridView2.Rows(i).Cells(6).Value
+            y = DataGridView2.Rows(i).Cells(9).Value
             If y <> 0 Then
-                Chart1.Series("NDE").Points.AddXY(x, y)
+                Chart1.Series("GOB").Points.AddXY(x, y)
             End If
         Next
 
@@ -100,15 +113,15 @@ Public Class Form1
             x = i 'DataGridView2.Rows(i).Cells(0).Value
             y = DataGridView2.Rows(i).Cells(7).Value
             If y <> 0 Then
-                Chart1.Series("DE").Points.AddXY(x, y)
+                Chart1.Series("NDE").Points.AddXY(x, y)
             End If
         Next
 
         For i = 0 To DataGridView2.RowCount - 2
             x = i 'DataGridView2.Rows(i).Cells(0).Value
-            y = DataGridView2.Rows(i).Cells(9).Value
+            y = DataGridView2.Rows(i).Cells(6).Value
             If y <> 0 Then
-                Chart1.Series("GOB").Points.AddXY(x, y)
+                Chart1.Series("DE").Points.AddXY(x, y)
             End If
         Next
 
@@ -117,14 +130,47 @@ Public Class Form1
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         'OK: Ingresar los registros a la tabla Motores
 
+        Dim NDE As Integer = Math.Round(Val(TextBox8.Text), 0)
+        Dim DE As Integer = Math.Round(Val(TextBox10.Text), 0)
+        Dim GOB As Integer = Math.Round(Val(TextBox12.Text), 0)
+
         Dim v As Integer
         v = Larger_WO()
 
+        'Si es roller, no haga chequeos de motor
+        If ((TextBox9.Text)(0)) = "R" Then
+            GoTo R200
+        End If
+
+        'Si el WO esta bien
         If (TextBox5.Text = "") Or (TextBox5.Text.Length <> 8) Or (Val(TextBox5.Text) <= v) Then
             MsgBox("Check the Work Order number, correct and try again.")
             GoTo E100
         End If
 
+        'Si el rango esta entre 10 y 80
+        If (NDE > 80 Or NDE < 10) Or
+            (DE > 80 Or DE < 10) Or
+            (GOB > 80 Or GOB < 10) Then
+            MsgBox("Seems like some values are off? Please correct and try again.")
+            GoTo E100
+        End If
+
+        'Si NDE y DE tienen sentido
+        If (NDE > DE) Then
+            NDE = Math.Round(Val(TextBox10.Text), 0)
+            DE = Math.Round(Val(TextBox8.Text), 0)
+        End If
+
+        'si GOB tiene sentido
+        If (GOB < DE And GOB > 0) Then
+            GOB = DE
+        End If
+
+        'MsgBox("NDE:" & NDE & " - DE:" & DE & " - GOB:" & GOB)
+        'GoTo E100
+
+R200:
         Try
             enlace()
             comando = New OleDb.OleDbCommand("INSERT INTO Readings(MTR, Tech, DTime, WO, Lane, DE, NDE, GIB, GOB)" & Chr(13) _
@@ -135,10 +181,10 @@ Public Class Form1
             comando.Parameters.AddWithValue("@DTime", TextBox6.Text)
             comando.Parameters.AddWithValue("@WO", TextBox5.Text)
             comando.Parameters.AddWithValue("@Lane", TextBox7.Text)
-            comando.Parameters.AddWithValue("@DE", Val(TextBox10.Text))
-            comando.Parameters.AddWithValue("@NDE", Val(TextBox8.Text))
+            comando.Parameters.AddWithValue("@DE", DE)
+            comando.Parameters.AddWithValue("@NDE", NDE)
             comando.Parameters.AddWithValue("@GIB", Val(TextBox11.Text))
-            comando.Parameters.AddWithValue("@GOB", Val(TextBox12.Text))
+            comando.Parameters.AddWithValue("@GOB", GOB)
             comando.ExecuteNonQuery()
             MsgBox("Data inserted by " & Environment.UserName)
             conexion.Close()
@@ -147,6 +193,16 @@ Public Class Form1
             cargar_tabla_readings(DataGridView2)
             'read_Readings_table(DataGridView2)
             plot_readings()
+
+            TextBox8.Text = ""
+            TextBox10.Text = ""
+            TextBox11.Text = ""
+            TextBox12.Text = ""
+
+            Dim indice As Integer = DataGridView3.CurrentRow.Index
+            Dim MTR As String = DataGridView3.Rows(indice).Cells(0).Value
+            ListBox1.Items.Add(MTR)
+            DataGridView3.Rows.RemoveAt(indice)
 
         Catch ex As Exception
             conexion.Close()
@@ -301,6 +357,17 @@ E100:
 
             conexion.Close()
 
+            If ComboBox1.Text = "CP31" Then
+                Label1.Text = "Induct and Recirculation"
+            ElseIf ComboBox1.Text = "CP32" Then
+                Label1.Text = "Routing Lane"
+            Else
+                Label1.Text = ""
+            End If
+
+
+
+
         Catch ex As Exception
             conexion.Close()
             MsgBox("Something went wrong! <Read Motors_List>")
@@ -312,13 +379,32 @@ E100:
         'read_Readings_table(DataGridView2)
         cargar_tabla_readings(DataGridView2)
         plot_readings()
+        TextBox8.Text = ""
+        TextBox10.Text = ""
+        TextBox12.Text = ""
+
+
+
+        If ((TextBox9.Text)(0)) = "M" Then
+            'MsgBox("MTR")
+            TextBox10.Enabled = True
+            TextBox10.BackColor = Color.White
+            TextBox12.Enabled = True
+            TextBox12.BackColor = Color.White
+        Else
+            'MsgBox("Roller")
+            TextBox10.Enabled = False
+            TextBox10.BackColor = Color.Silver
+            TextBox12.Enabled = False
+            TextBox12.BackColor = Color.Silver
+
+        End If
 
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         Try
-            Dim t As Integer
-            t = Val(TextBox13.Text)
+            Dim t As Integer = Val(TextBox13.Text) 'Valor a truncar
             'read_Readings_table(DataGridView2)
             cargar_tabla_readings(DataGridView2)
             truncar_lista(t)
@@ -329,15 +415,94 @@ E100:
     End Sub
 
     Sub truncar_lista(r As Integer)
-        Dim ufil As Integer
-        ufil = DataGridView2.Rows.Count - 2
-        For i = ufil To r Step -1
+        Dim ufil As Integer = DataGridView2.Rows.Count - 2
+
+        Dim quitar As Integer = ufil - r
+
+
+        For i = quitar To 0 Step -1
             DataGridView2.Rows.RemoveAt(i)
         Next
     End Sub
 
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItem.Click
         MsgBox("Data saved")
+    End Sub
+
+    <Obsolete>
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        'create the mail message----------------------------------------------------------------------------
+        'Try
+        '    Dim desde As String
+        '    desde = "jgonzalez@metacortex.tech"
+        '    Dim llave As String
+        '    llave = ""
+        '    Dim para As String
+        '    para = "john_jairog@hotmail.com"
+
+        '    Dim Smtp_Server As New SmtpClient
+        '    Dim e_mail As New MailMessage()
+        '    Smtp_Server.UseDefaultCredentials = False
+        '    Smtp_Server.Credentials = New Net.NetworkCredential(desde, llave)
+        '    Smtp_Server.Port = 587
+        '    Smtp_Server.EnableSsl = True
+        '    Smtp_Server.Host = "smtp.gmail.com"
+
+        '    e_mail = New MailMessage()
+        '    e_mail.From = New MailAddress(desde)
+        '    e_mail.To.Add(para)
+        '    e_mail.Subject = "Este es el asunto"
+        '    e_mail.IsBodyHtml = False
+        '    e_mail.Body = "este es el cuerpo"
+        '    Smtp_Server.Send(e_mail)
+        '    MsgBox("Mail Sent")
+
+        'Catch error_t As Exception
+        '    MsgBox(error_t.ToString)
+        'End Try
+        '--------------------------------------------------------------------------------------------
+
+        Dim correo As New MailMessage
+        Dim autenticar As New NetworkCredential
+        Dim envio As New SmtpClient
+
+        Try
+            correo.Body = "Este es el cuerpo" 'Me.TextBox_mensaje.Text 'aqui va el cuerpo del mensaje
+            correo.Subject = "Este es el asunto" 'Me.TextBox_asunto.Text 'aqui va el asunto
+            correo.IsBodyHtml = True
+            correo.To.Add("IR_RME@hotmail.com") '(Trim(Me.TextBox_destino.Text)) 'aqui va el destinatario
+            correo.From = New MailAddress("IR_RME@hotmail.com", "rme123456") '(Me.TextBox_user.Text.Trim, "Mensajeria 1.0 vb.net ®")
+
+            envio.Credentials = New NetworkCredential("IR_RME@hotmail.com", "rme123456") '(Me.TextBox_user.Text.Trim, Me.TextBox_pass.Text.Trim)
+
+            'If (RadioButton_hotmail.Checked = True) Then
+            'el correo es enviado desde hotmail
+            envio.Host = "smtp.live.com"
+            envio.Port = 25
+            envio.EnableSsl = True
+            'correo.Attachments 'aqui se envian mensajes adjuntos
+            'End If
+
+            'If (RadioButton_gmail.Checked = True) Then
+            '    'el correo es enviado desde gmail
+            '    envio.Host = "smtp.gmail.com"
+            '    envio.Port = 587
+            '    envio.EnableSsl = True
+            '    'correo.Attachments 'aqui se envian mensajes adjuntos
+            'End If
+
+            envio.Send(correo)
+
+            MessageBox.Show("Correo Enviado exitosamente...", "Mensajeria 1.0 vb.net ®", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        Catch ex As Exception
+
+            MessageBox.Show(ex.Message, "Mensajeria 1.0 vb.net ®", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
+
+        '--------------------------------------------------------------------------------------------
+
     End Sub
 
 
