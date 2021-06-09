@@ -4,23 +4,36 @@ Imports System.Net
 Imports System.Net.Mail
 Imports EASendMail
 
+'////////////////////////////////////
+
 Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        inicio()
+    End Sub
+
+    Sub inicio()
         enlace()
-        'Label1.Text = estado
         ToolStripStatusLabel1.Text = estado
         TextBox4.Text = Environment.UserName
         TextBox6.Text = Today()
+
+        With DataGridView4
+            .Columns.Add("Column1", "MTR/Bearing")
+            .Columns(0).Width = 100
+            .Columns.Add("Column2", "NDE")
+            .Columns(1).Width = 65
+            .Columns.Add("Column3", "DE")
+            .Columns(2).Width = 65
+            .Columns.Add("Column4", "GOB")
+            .Columns(3).Width = 65
+        End With
 
         cargar_lista_lanes()
 
         conexion.Close()
 
-        ComboBox1.SelectedIndex = ComboBox1.FindStringExact("Pack Lane 1") 'MTR 61302
-
         read_Readings_table(DataGridView1)
         cargar_tabla_readings(DataGridView2)
-        'read_Readings_table(DataGridView2)
         plot_readings()
 
         If TextBox4.Text = "ajhgonz" Then
@@ -28,6 +41,8 @@ Public Class Form1
             Button5.Visible = True
             Button1.Visible = True
         End If
+
+        ComboBox1.SelectedIndex = ComboBox1.FindStringExact("Pack Lane 1") 'MTR 61302
 
     End Sub
 
@@ -47,7 +62,8 @@ Public Class Form1
             .Add("Lanes 2/2")
             .Add("Tranship")
             .Add("Trash Lane")
-            .Add("Merge Lane")
+            .Add("Merge Lane North")
+            .Add("Merge Lane South")
         End With
     End Sub
 
@@ -129,16 +145,19 @@ Public Class Form1
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         'OK: Ingresar los registros a la tabla Motores
+        'Ok solo envia datos a "cache" (DGV4), pero No guarda.
 
         Dim NDE As Integer = Math.Round(Val(TextBox8.Text), 0)
         Dim DE As Integer = Math.Round(Val(TextBox10.Text), 0)
         Dim GOB As Integer = Math.Round(Val(TextBox12.Text), 0)
+        Dim v As Integer = Larger_WO()
 
-        Dim v As Integer
-        v = Larger_WO()
-
-        'Si es roller, no haga chequeos de motor
-        If ((TextBox9.Text)(0)) = "R" Then
+        'Si es roller, no haga chequeos de motor, solo el WO y siga.
+        If ((TextBox9.Text)(0)) = "R" Then        'Si el WO esta bien
+            If (TextBox5.Text = "") Or (TextBox5.Text.Length <> 8) Or (Val(TextBox5.Text) <= v) Then
+                MsgBox("Check the Work Order number, correct and try again.")
+                GoTo E100
+            End If
             GoTo R200
         End If
 
@@ -167,48 +186,93 @@ Public Class Form1
             GOB = DE
         End If
 
-        'MsgBox("NDE:" & NDE & " - DE:" & DE & " - GOB:" & GOB)
-        'GoTo E100
-
 R200:
         Try
-            enlace()
-            comando = New OleDb.OleDbCommand("INSERT INTO Readings(MTR, Tech, DTime, WO, Lane, DE, NDE, GIB, GOB)" & Chr(13) _
-                                             & "VALUES(TextBox9, TextBox4, TextBox6, TextBox5, TextBox7, TextBox10, TextBox8, TextBox11, TextBox12)", conexion)
 
-            comando.Parameters.AddWithValue("@MTR", TextBox9.Text)
-            comando.Parameters.AddWithValue("@Tech", TextBox4.Text)
-            comando.Parameters.AddWithValue("@DTime", TextBox6.Text)
-            comando.Parameters.AddWithValue("@WO", TextBox5.Text)
-            comando.Parameters.AddWithValue("@Lane", TextBox7.Text)
-            comando.Parameters.AddWithValue("@DE", DE)
-            comando.Parameters.AddWithValue("@NDE", NDE)
-            comando.Parameters.AddWithValue("@GIB", Val(TextBox11.Text))
-            comando.Parameters.AddWithValue("@GOB", GOB)
-            comando.ExecuteNonQuery()
-            MsgBox("Data inserted by " & Environment.UserName)
-            conexion.Close()
+            If DataGridView3.RowCount > 0 Then
 
-            read_Readings_table(DataGridView1)
-            cargar_tabla_readings(DataGridView2)
-            'read_Readings_table(DataGridView2)
-            plot_readings()
+                Dim indice As Integer = DataGridView3.CurrentRow.Index
+                Dim MTR As String = DataGridView3.Rows(indice).Cells(0).Value
 
-            TextBox8.Text = ""
-            TextBox10.Text = ""
-            TextBox11.Text = ""
-            TextBox12.Text = ""
+                DataGridView4.Rows.Add()
+                Dim fila As Integer = DataGridView4.Rows.Count - 2
+                With DataGridView4.Rows(fila)
+                    .Cells(0).Value = MTR
+                    .Cells(1).Value = NDE
+                    .Cells(2).Value = DE
+                    .Cells(3).Value = GOB
+                End With
 
-            Dim indice As Integer = DataGridView3.CurrentRow.Index
-            Dim MTR As String = DataGridView3.Rows(indice).Cells(0).Value
-            ListBox1.Items.Add(MTR)
-            DataGridView3.Rows.RemoveAt(indice)
+                TextBox8.Text = ""
+                TextBox10.Text = ""
+                TextBox11.Text = ""
+                TextBox12.Text = ""
+
+                ListBox1.Items.Add(MTR)
+                DataGridView3.Rows.RemoveAt(indice)
+
+            End If
+
+            'If DataGridView3.RowCount = 0 Then
+            '    Guardar_en_DB()
+            'End If
 
         Catch ex As Exception
             conexion.Close()
-            MsgBox("Something went wrong. Data rejected!")
+            MsgBox("Error trying to save... Data rejected!")
         End Try
 E100:
+    End Sub
+
+    Sub Guardar_en_DB()
+        Try
+
+            enlace()
+
+            MsgBox("Readings for " & DataGridView4.RowCount - 1 & " elements. Please wait, saving data...")
+
+            For i = 0 To DataGridView4.RowCount - 2
+
+
+                Dim DGV4 As DataGridView = DataGridView4
+                Dim ufil As Integer = DGV4.RowCount - 2
+                Dim MTR As String = DataGridView4.Rows(i).Cells(0).Value
+                Dim DE As Integer = DataGridView4.Rows(i).Cells(1).Value
+                Dim NDE As Integer = DataGridView4.Rows(i).Cells(2).Value
+                Dim GIB As Integer
+                Dim GOB As Integer = DataGridView4.Rows(i).Cells(3).Value
+                Dim cadena_comando As String
+                cadena_comando = "INSERT INTO Readings(MTR, Tech, DTime, WO, Lane, DE, NDE, GIB, GOB)" & Chr(13) _
+                       & "VALUES(TextBox9, TextBox4, TextBox6, TextBox5, TextBox7, TextBox10, TextBox8, TextBox11, TextBox12)"
+
+                comando = New OleDb.OleDbCommand(cadena_comando, conexion)
+
+                comando.Parameters.AddWithValue("@MTR", MTR)
+                comando.Parameters.AddWithValue("@Tech", TextBox4.Text)
+                comando.Parameters.AddWithValue("@DTime", TextBox6.Text)
+                comando.Parameters.AddWithValue("@WO", TextBox5.Text)
+                comando.Parameters.AddWithValue("@Lane", TextBox7.Text)
+                comando.Parameters.AddWithValue("@DE", DE)
+                comando.Parameters.AddWithValue("@NDE", NDE)
+                comando.Parameters.AddWithValue("@GIB", GIB)
+                comando.Parameters.AddWithValue("@GOB", GOB)
+
+                comando.ExecuteNonQuery()
+            Next
+
+            MsgBox("Data inserted into the database by " & Environment.UserName)
+
+            conexion.Close()
+
+            inicio()
+
+            ComboBox1.SelectedIndex = ComboBox1.FindStringExact("Pack Lane 2")
+            ComboBox1.SelectedIndex = ComboBox1.FindStringExact("Pack Lane 1")
+
+        Catch ex As Exception
+            conexion.Close()
+        MsgBox("Something went wrong trying to insert the data into the database. Data rejected!")
+        End Try
     End Sub
 
     Function Larger_WO() As Integer
@@ -231,7 +295,6 @@ E100:
     End Function
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        'read_Readings_table(DataGridView1)
         cargar_tabla_readings(DataGridView2)
         plot_readings()
     End Sub
@@ -299,8 +362,6 @@ E100:
 
             comando = New OleDb.OleDbCommand("SELECT * FROM Readings", conexion)
 
-            'comando = New OleDb.OleDbCommand("SELECT * FROM Readings WHERE MTR='" & MTR & "'", conexion)
-
             Dim lector As OleDbDataReader
             Dim tabla As New DataTable()
 
@@ -345,15 +406,17 @@ E100:
             tabla.Load(lector)
 
             Me.DataGridView3.DataSource = tabla
-            DataGridView3.ReadOnly = True
-            DataGridView3.ColumnHeadersVisible = False
-            DataGridView3.RowHeadersVisible = False
-            DataGridView3.AllowUserToAddRows = False
-            DataGridView3.AllowUserToDeleteRows = False
-            DataGridView3.AllowUserToResizeRows = False
-            DataGridView3.AllowUserToResizeColumns = False
-            DataGridView3.AllowUserToOrderColumns = False
-            DataGridView3.Columns(0).Width = DataGridView3.Width
+            With DataGridView3
+                .ReadOnly = True
+                .ColumnHeadersVisible = False
+                .RowHeadersVisible = False
+                .AllowUserToAddRows = False
+                .AllowUserToDeleteRows = False
+                .AllowUserToResizeRows = False
+                .AllowUserToResizeColumns = False
+                .AllowUserToOrderColumns = False
+                .Columns(0).Width = DataGridView3.Width
+            End With
 
             conexion.Close()
 
@@ -374,31 +437,45 @@ E100:
         End Try
     End Sub
 
+
+    Private Sub DataGridView3_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView3.SelectionChanged
+        si_otro_motor_es_seleccionado()
+    End Sub
+
+
     Private Sub DataGridView3_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView3.CellContentClick
-        TextBox9.Text = DataGridView3.CurrentCell.Value
-        'read_Readings_table(DataGridView2)
-        cargar_tabla_readings(DataGridView2)
-        plot_readings()
-        TextBox8.Text = ""
-        TextBox10.Text = ""
-        TextBox12.Text = ""
+        si_otro_motor_es_seleccionado()
+    End Sub
 
+    Sub si_otro_motor_es_seleccionado()
+        Try
+            If DataGridView3.RowCount > 0 Then
+                TextBox9.Text = DataGridView3.CurrentCell.Value
+                cargar_tabla_readings(DataGridView2)
+                plot_readings()
+                TextBox8.Text = ""
+                TextBox10.Text = ""
+                TextBox12.Text = ""
 
+                If ((TextBox9.Text)(0)) = "M" Then
+                    'MsgBox("MTR")
+                    TextBox10.Enabled = True
+                    TextBox10.BackColor = Color.White
+                    TextBox12.Enabled = True
+                    TextBox12.BackColor = Color.White
+                Else
+                    'MsgBox("Roller")
+                    TextBox10.Enabled = False
+                    TextBox10.BackColor = Color.Silver
+                    TextBox12.Enabled = False
+                    TextBox12.BackColor = Color.Silver
 
-        If ((TextBox9.Text)(0)) = "M" Then
-            'MsgBox("MTR")
-            TextBox10.Enabled = True
-            TextBox10.BackColor = Color.White
-            TextBox12.Enabled = True
-            TextBox12.BackColor = Color.White
-        Else
-            'MsgBox("Roller")
-            TextBox10.Enabled = False
-            TextBox10.BackColor = Color.Silver
-            TextBox12.Enabled = False
-            TextBox12.BackColor = Color.Silver
+                End If
+            End If
 
-        End If
+        Catch ex As Exception
+            MsgBox("Error in DGV3 cell content.")
+        End Try
 
     End Sub
 
@@ -426,6 +503,7 @@ E100:
     End Sub
 
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItem.Click
+        Guardar_en_DB()
         MsgBox("Data saved")
     End Sub
 
@@ -505,5 +583,12 @@ E100:
 
     End Sub
 
+    Private Sub Form1_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+        If (MessageBox.Show("Did you save this job?... Are you sure you want to close?", "", MessageBoxButtons.YesNo) = Windows.Forms.DialogResult.No) Then
+            e.Cancel = True
+        End If
+    End Sub
 
+
+    '///////////////
 End Class
